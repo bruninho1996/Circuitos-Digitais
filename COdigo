@@ -42,9 +42,11 @@ digitalWrite(ledOrange, nor_function(vetA[i], vetB[i])); delay(1500);
 for (i = 0; i < 4; i++) { digitalWrite(ledBlue, vetA[i]); digitalWrite(ledYellow, vetB[i]);
 digitalWrite(ledOrange, xor_function(vetA[i], vetB[i])); delay(1500);
 }
- 
- 
-
-  
-
-} 
+//XNOR
+for (i = 0; i < 4; i++) {
+digitalWrite(ledOrange, vetA[i]);
+digitalWrite(ledYellow, vetB[i]);
+digitalWrite(ledBlue, xnor_function(vetA[i], vetB[i]));
+delay(1500);
+}
+}
