@@ -1,0 +1,82 @@
+int pinOutA = 2;
+int pinOutB = 3;
+int pinOutC = 4;
+int pinOutD = 5;
+int pinOutE = 6;
+int pinOutF = 7;
+int pinOutG = 8;
+int pinOutDP = 9;
+
+
+int pinA = 13;
+int pinB = 12;
+int pinC = 11;
+int pinD = 10;
+
+void setup()
+{
+	pinMode(pinOutA, OUTPUT);
+	pinMode(pinOutB, OUTPUT);
+	pinMode(pinOutC, OUTPUT);
+	pinMode(pinOutD, OUTPUT);
+	pinMode(pinOutE, OUTPUT);
+	pinMode(pinOutF, OUTPUT);
+	pinMode(pinOutG, OUTPUT);
+	pinMode(pinOutDP, OUTPUT);
+	pinMode (pinA, INPUT);
+	pinMode (pinB, INPUT);
+	pinMode	(pinC, INPUT);
+	pinMode (pinD, INPUT);
+}
+
+bool or_function(int a, int b){
+  return a||b;
+}
+bool and_function(int a,int b){
+  return a&&b;
+}
+
+bool nand_function (bool a, bool b){
+ 	return !(a&&b);
+}
+bool nor_function (bool a, bool b){
+	return !(a||b);
+}
+
+bool xor_function (bool a, bool b) {
+	return (!a && b) || (a && !b);
+}
+
+bool xnor_function (bool a, bool b) {
+	return (!a && !b) || (a && b);
+}
+
+void loop()
+{
+	bool var_a = 0;
+	bool var_b = 0;
+	bool var_c = 0;
+	bool var_d = 0;
+	
+	bool varWrtA, varWrtB, varWrtC, varWrtD, varWrtE, varWrtF, varWrtG;
+	var_a = digitalRead(pinA);
+	var_b = digitalRead(pinB);
+	var_c = digitalRead(pinC);
+	var_d = digitalRead(pinD);
+	
+	varWrtA = or_function(or_function(and_function(!var_c, !var_a), var_b), or_function(and_function(var_c,var_a),var_d));
+	varWrtB = or_function(or_function(!var_c, and_function(!var_b, !var_a)), and_function(var_b, var_a));
+	varWrtC = or_function(or_function(!var_b, var_a), var_c);
+	varWrtD = or_function(or_function(or_function(and_function(!var_c,!var_a),and_function(!var_c, var_b)),and_function(!var_a, var_b)), or_function( and_function(and_function(var_c,!var_b), var_a), var_d));
+	varWrtE = or_function(and_function(!var_c,!var_a), and_function(var_b,!var_a));
+	varWrtF = or_function(or_function(and_function(!var_b,!var_a),and_function(var_c,!var_b)),or_function(and_function(var_c,!var_a), var_d));
+	varWrtG = or_function(or_function(and_function(!var_c,var_b),and_function(var_c,!var_b)),or_function(and_function(var_c,!var_a),var_d));
+	 
+	digitalWrite(pinOutA, !varWrtA);
+	digitalWrite(pinOutB, !varWrtB);
+	digitalWrite(pinOutC, !varWrtC);
+	digitalWrite(pinOutD, !varWrtD);
+	digitalWrite(pinOutE, !varWrtE);
+	digitalWrite(pinOutF, !varWrtF);
+	digitalWrite(pinOutG, !varWrtG);
+}
