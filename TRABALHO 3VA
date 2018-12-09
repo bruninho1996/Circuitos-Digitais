@@ -1,0 +1,76 @@
+#include <LiquidCrystal.h>
+int DQuatro = 0; int DCinco = 1; int DSeis = 2; int DSete = 3; int RS = 4;
+int Enable = 5; int dip = A0;
+
+LiquidCrystal lcd(RS, Enable, DQuatro, DCinco, DSeis, DSete);
+int AUm =  6; int ADois = 7; int ATres = 8; int AQuatro = 9;
+
+int BUm =  10; int BDois = 11; int BTres = 12; int BQuatro = 13;
+
+int valorAUm; int valorADois; int valorATres;
+int valorAQuatro;
+
+int valorBUm; int valorBDois; int valorBTres;
+int valorBQuatro;
+
+int valorDip;
+int SomaS(int A, int B, int T)
+{
+return (A && !B && !T) || (!A && !B && T) || (A && B && T)
+|| (!A && B && !T);
+}
+
+int SomaT(int A, int B, int T, int Dip)
+{
+return (B && T) || (!Dip && A && B) || (!Dip && A && T) || (Dip && !A && B) || (Dip && !A && T);
+}
+
+int ConverterToDecimal(int A, int B, int C, int D, int E)
+{
+return (A * 1) + (B * 2) + (C * 4) + (D * 8) + (E * 16);
+}
+void setup()
+{
+pinMode(AUm, INPUT); pinMode(ADois, INPUT); pinMode(ATres, INPUT); pinMode(AQuatro, INPUT);
+
+pinMode(BUm, INPUT); pinMode(BDois, INPUT); pinMode(BTres, INPUT); pinMode(BQuatro, INPUT);
+
+lcd.begin(16, 2);
+}
+void loop()
+{
+valorDip = digitalRead(dip);
+
+valorAUm = digitalRead(AUm); valorADois = digitalRead(ADois); valorATres = digitalRead(ATres); valorAQuatro = digitalRead(AQuatro);
+
+valorBUm = digitalRead(BUm); valorBDois = digitalRead(BDois); valorBTres = digitalRead(BTres); valorBQuatro = digitalRead(BQuatro);
+
+int resS1 = SomaS(valorAUm, valorBUm, 0);
+int resT1 = SomaT(valorAUm, valorBUm, 0, valorDip);
+
+int resS2 = SomaS(valorADois, valorBDois, resT1);
+int resT2 = SomaT(valorADois, valorBDois, resT1, valorDip);
+
+int resS3 = SomaS(valorATres, valorBTres, resT2);
+int resT3 = SomaT(valorATres, valorBTres, resT2, valorDip);
+
+int resS4 = SomaS(valorAQuatro, valorBQuatro, resT3); int resT4 = SomaT(valorAQuatro, valorBQuatro, resT3,
+valorDip);
+
+int resultadoA = ConverterToDecimal(valorAUm, valorADois, valorATres, valorAQuatro, 0);
+int resultadoB = ConverterToDecimal(valorBUm, valorBDois, valorBTres, valorBQuatro, 0);
+
+int resultadoTotal = ConverterToDecimal(resS1, resS2, resS3, resS4, resT4);
+
+if(valorDip == 1 && resultadoA < resultadoB) { resultadoTotal -= 32;
+}
+
+lcd.clear(); lcd.setCursor(3, 0);
+
+lcd.print(resultadoA);
+valorDip == 1 ? lcd.print(" - ") : lcd.print(" + "); lcd.print(resultadoB);
+
+lcd.setCursor(5, 1); lcd.print(resultadoTotal);
+
+delay(2000);
+}
